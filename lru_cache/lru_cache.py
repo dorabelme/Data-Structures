@@ -1,3 +1,6 @@
+import collections
+
+
 class LRUCache:
     """
     Our LRUCache class keeps track of the max number of nodes it
@@ -6,8 +9,15 @@ class LRUCache:
     order, as well as a storage dict that provides fast access
     to every node stored in the cache.
     """
+
     def __init__(self, limit=10):
-        pass
+        # self.limit = limit
+        # self.tm = 0
+        # self.cache = {}
+        # self.lru = {}
+
+        self.limit = limit
+        self.cache = collections.OrderedDict()
 
     """
     Retrieves the value associated with the given key. Also
@@ -16,9 +26,20 @@ class LRUCache:
     Returns the value associated with the key or None if the
     key-value pair doesn't exist in the cache.
     """
-    def get(self, key):
-        pass
 
+    def get(self, key):
+        # if key in self.cache:
+        #     self.lru[key] = self.tm
+        #     self.tm += 1
+        #     return self.cache[key]
+        # return None
+
+        try:
+            value = self.cache.pop(key)
+            self.cache[key] = value
+            return value
+        except KeyError:
+            return None
     """
     Adds the given key-value pair to the cache. The newly-
     added pair should be considered the most-recently used
@@ -29,5 +50,20 @@ class LRUCache:
     want to overwrite the old value associated with the key with
     the newly-specified value.
     """
+
     def set(self, key, value):
-        pass
+        # if len(self.cache) >= self.limit:
+        #     # find the LRU entry
+        #     old_key = min(self.lru.keys(), key=lambda k: self.lru[k])
+        #     self.cache.pop(old_key)
+        #     self.lru.pop(old_key)
+        # self.cache[key] = value
+        # self.lru[key] = self.tm
+        # self.tm += 1
+
+        try:
+            self.cache.pop(key)
+        except KeyError:
+            if len(self.cache) >= self.limit:
+                self.cache.popitem(last=False)
+        self.cache[key] = value
