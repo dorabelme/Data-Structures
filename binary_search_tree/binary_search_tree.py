@@ -15,10 +15,22 @@ class BinarySearchTree:
         # if insterting we must already have a tree/root
         # if value is less than self.value go left, make a new tree node if empty otherwise keep going (recursion)
         # if greater than or equal to then go right, make a new tree node if empty otherwise recursion
-        pass
+        if not self.value:
+            self.value = value
+        elif value < self.value:
+            if self.left is None:
+                self.left = BinarySearchTree(value)
+            else:
+                self.left.insert(value)
+        elif value >= self.value:
+            if self.right is None:
+                self.right = BinarySearchTree(value)
+            else:
+                self.right.insert(value)
 
     # Return True if the tree contains the value
     # False if it does not
+
     def contains(self, target):
         # if target == self.value return it
         # otherwise go left or right based on smaller or bigger
