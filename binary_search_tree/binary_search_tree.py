@@ -76,44 +76,44 @@ class BinarySearchTree:
         if self.value:
 
             # First recur on left child
-            self.left.in_order_print(self.left)
+            if self.left:
+                self.left.in_order_print(self.left)
 
         # Then print the data of node
             print(self.value)
 
         # now recur on right child
-            self.right.in_order_print(self.right)
+            if self.right:
+                self.right.in_order_print(self.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        nodes = []
-        stack = [self.value]
-        while stack:
-            cur_node = stack[0]
-            stack = stack[1:]
-            nodes.append(cur_node)
-            for child in cur_node.get_children():
-                stack.append(child)
-        return nodes
+        visited = []
+        if node:
+            visited.append(node.value)
+            print(node.value)
+        current = node
+        while current:
+            if current.left:
+                print(current.left.value)
+                visited.append(current.left)
+            if current.right:
+                print(current.right.value)
+                visited.append(current.right)
+            visited.pop(0)
+            if not visited:
+                break
+            current = visited[0]
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
-        nodes = []
-        stack = [self.value]
-        while stack:
-            cur_node = stack[0]
-            stack = stack[1:]
-            nodes.append(cur_node)
-            for child in cur_node.get_rev_children():
-                stack.insert(0, child)
-        return nodes
 
-    # STRETCH Goals -------------------------
-    # Note: Research may be required
+        # STRETCH Goals -------------------------
+        # Note: Research may be required
 
-    # Print In-order recursive DFT
+        # Print In-order recursive DFT
 
     def pre_order_dft(self, node):
         if self.value:
