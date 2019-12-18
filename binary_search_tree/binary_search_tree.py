@@ -51,10 +51,13 @@ class BinarySearchTree:
     def get_max(self):
         # if right exists, go right
         # otherwise return self.value
-        pass
+        if self.right == None:
+            return self.value
+        return self.right.get_max()
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
+
     def for_each(self, cb):
         pass
 
