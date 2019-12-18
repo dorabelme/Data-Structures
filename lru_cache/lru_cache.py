@@ -1,4 +1,5 @@
-import collections
+# import collections
+from doubly_linked_list import DoublyLinkedList
 
 
 class LRUCache:
@@ -11,13 +12,21 @@ class LRUCache:
     """
 
     def __init__(self, limit=10):
+        # Solution 1
         # self.limit = limit
         # self.tm = 0
         # self.cache = {}
         # self.lru = {}
 
+        # Solution 2
+        # self.limit = limit
+        # self.cache = collections.OrderedDict()
+
+        # Solution 3
         self.limit = limit
-        self.cache = collections.OrderedDict()
+        self.size = 0
+        self.dll = DoublyLinkedList()
+        self.storage = {}
 
     """
     Retrieves the value associated with the given key. Also
@@ -28,17 +37,27 @@ class LRUCache:
     """
 
     def get(self, key):
+        # Solution 1
         # if key in self.cache:
         #     self.lru[key] = self.tm
         #     self.tm += 1
         #     return self.cache[key]
         # return None
 
-        try:
-            value = self.cache.pop(key)
-            self.cache[key] = value
-            return value
-        except KeyError:
+        # Solution 2
+        # try:
+        #     value = self.cache.pop(key)
+        #     self.cache[key] = value
+        #     return value
+        # except KeyError:
+        #     return None
+
+        # Solution 3
+        if key in self.storage:
+            node = self.storage[key]
+            self.dll.move_to_end(node)
+            return node.value[1]
+        else:
             return None
     """
     Adds the given key-value pair to the cache. The newly-
@@ -52,6 +71,7 @@ class LRUCache:
     """
 
     def set(self, key, value):
+        # Solution 1
         # if len(self.cache) >= self.limit:
         #     # find the LRU entry
         #     old_key = min(self.lru.keys(), key=lambda k: self.lru[k])
@@ -61,9 +81,31 @@ class LRUCache:
         # self.lru[key] = self.tm
         # self.tm += 1
 
-        try:
-            self.cache.pop(key)
-        except KeyError:
-            if len(self.cache) >= self.limit:
-                self.cache.popitem(last=False)
-        self.cache[key] = value
+        # Solution 2
+        # try:
+        #     self.cache.pop(key)
+        # except KeyError:
+        #     if len(self.cache) >= self.limit:
+        #         self.cache.popitem(last=False)
+        # self.cache[key] = value
+
+        # Solution 3
+        # Check the length if at limit, delete last
+        # Check and see if value is in cache
+        if key in self.storage:
+            node = self.storage[key]
+            node.value = (key, value)
+            self.dll.move_to_end(node)
+            return
+
+        # If key is in the cache, move to front and update value
+        if self.size == self.limit:
+            del self.storage[self.dll.head.value[0]]
+            self.dll.remove_from_head()
+            self.size -= 1
+
+        # If not, add to the front of the cache
+        # Defining tail as most recent and head as oldest
+        self.dll.add_to_tail((key, value))
+        self.storage[key] = self.dll.tail
+        self.size += 1
