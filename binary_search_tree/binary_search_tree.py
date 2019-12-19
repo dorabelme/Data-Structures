@@ -59,13 +59,24 @@ class BinarySearchTree:
     # You may use a recursive or iterative approach
 
     def for_each(self, cb):
-        if not self.value:
-            return None
-        cb(self.value)
-        if self.left:
-            self.left.for_each(cb)
-        if self.right:
-            self.right.for_each(cb)
+        # if not self.value:
+        #     return None
+        # cb(self.value)
+        # if self.left:
+        #     self.left.for_each(cb)
+        # if self.right:
+        #     self.right.for_each(cb)
+
+        stack = Stack()
+        stack.push(self)
+
+        while stack.len() > 0:
+            current_node = stack.pop()
+            if current_node.right:
+                stack.push(current_node.right)
+            if current_node.left:
+                stack.push(current_node.left)
+            cb(current_node.value)
 
     # DAY 2 Project -----------------------
 
@@ -109,11 +120,20 @@ class BinarySearchTree:
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
+        nodes = []
+        stack = [self.value]
+        while stack:
+            cur_node = stack[0]
+            stack = stack[1:]
+            nodes.append(cur_node)
+            for child in cur_node.get_rev_children():
+                stack.insert(0, child)
+        return nodes
 
-        # STRETCH Goals -------------------------
-        # Note: Research may be required
+    # STRETCH Goals -------------------------
+    # Note: Research may be required
 
-        # Print In-order recursive DFT
+    # Print In-order recursive DFT
 
     def pre_order_dft(self, node):
         if self.value:
