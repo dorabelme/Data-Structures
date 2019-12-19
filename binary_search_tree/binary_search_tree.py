@@ -67,6 +67,12 @@ class BinarySearchTree:
         # if self.right:
         #     self.right.for_each(cb)
 
+        # cb(self.value):
+            # if self.left:
+                # self.left.for_each(cb)
+            # if self.right:
+                # seelf.right.for_each(cb)
+
         stack = Stack()
         stack.push(self)
 
@@ -100,35 +106,29 @@ class BinarySearchTree:
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        visited = []
-        if node:
-            visited.append(node.value)
+        queue = Queue()
+        queue.enqueue(node)
+        while queue.len() > 0:
+            node = queue.dequeue()
             print(node.value)
-        current = node
-        while current:
-            if current.left:
-                print(current.left.value)
-                visited.append(current.left)
-            if current.right:
-                print(current.right.value)
-                visited.append(current.right)
-            visited.pop(0)
-            if not visited:
-                break
-            current = visited[0]
+            if node.left:
+                queue.enqueue(node.left)
+            if node.right:
+                queue.enqueue(node.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
+
     def dft_print(self, node):
-        nodes = []
-        stack = [self.value]
-        while stack:
-            cur_node = stack[0]
-            stack = stack[1:]
-            nodes.append(cur_node)
-            for child in cur_node.get_rev_children():
-                stack.insert(0, child)
-        return nodes
+        stack = Stack()
+        stack.push(node)
+        while stack.len() > 0:
+            node = stack.pop()
+            print(node.value)
+            if node.left:
+                stack.push(node.left)
+            if node.right:
+                stack.push(node.right)
 
     # STRETCH Goals -------------------------
     # Note: Research may be required
